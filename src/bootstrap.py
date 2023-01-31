@@ -58,7 +58,22 @@ if __name__ == "__main__":
     watchdog.stoppedEvent += onWatchDogStopped
     watchdog.softTimeoutEvent += onWatchDogSoftTimeout
     watchdog.hardTimeoutEvent += onWatchDogHardTimeoutEvent
-    watchdog.start()
+
+    # watchdog doesn't really work for paper trading account
+    # https://github.com/erdewit/ib_insync/issues/298
+    #
+    # Simulate starting IBC ourselves
+    if trade_mode == 'paper':
+        watchdog.controller.start()
+        watchdog.ib.connect(
+            watchdog.host, watchdog.port, watchdog.clientId, watchdog.connectTimeout,
+            watchdog.readonly, watchdog.account)
+    else:
+        watchdog.start()
+
     ib.run()
     logging.info('IB gateway is ready.')
+
+    if trade_mode == 'paper':
+        watchdog.controller.terminate()
     
