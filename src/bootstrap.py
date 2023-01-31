@@ -34,7 +34,7 @@ if __name__ == "__main__":
         logging.info('IB gateway disconnected')
     ib.connectedEvent += onConnected
     ib.disconnectedEvent += onDisconnected
-    watchdog = Watchdog(ibc, ib, port=4001, 
+    watchdog = Watchdog(ibc, ib, port=4002 if trade_mode == 'paper' else 4001, 
         connectTimeout=int(os.environ['IBGW_WATCHDOG_CONNECT_TIMEOUT']), 
         appStartupTime=int(os.environ['IBGW_WATCHDOG_APP_STARTUP_TIME']), 
         appTimeout=int(os.environ['IBGW_WATCHDOG_APP_TIMEOUT']),
